@@ -45,8 +45,6 @@ k3.metric("Avg Monthly Bill", f"${avg_revenue:.2f}")
 
 st.divider()
 
-# --- EXISTING SECTIONS ---
-
 # 5. Contracts
 st.subheader("1. Which contracts drive churn?")
 st.caption("Month-to-month contracts usually have the highest turnover.")
@@ -72,37 +70,17 @@ if "tenure" in df.columns:
     tenure_churn = tenure_churn.reindex(order)
     st.line_chart(tenure_churn, x_label="Tenure Group", y_label="Churn Rate (%)")
 
-# --- NEW SECTIONS BELOW ---
 
-# 7. Payment Methods (Crucial Insight)
+# 7. Payment Methods
 st.subheader("3. Payment Method Risks")
 st.caption("Electronic checks often indicate higher churn risk compared to automatic payments.")
 
 if "PaymentMethod" in df.columns:
-    # We use a horizontal bar chart because the labels (e.g., "Bank transfer (automatic)") are long
     pay_churn = df.groupby("PaymentMethod")["is_churn"].mean() * 100
     st.bar_chart(pay_churn, horizontal=True, x_label="Churn Rate (%)", color="#FFA500")
 
-# 8. "Sticky" Services (Tech Support & Security)
-st.subheader("4. The 'Stickiness' of Support Services")
-st.caption("Customers who subscribe to support or security services are significantly less likely to leave.")
-
-col_a, col_b = st.columns(2)
-
-with col_a:
-    if "TechSupport" in df.columns:
-        st.markdown("**Tech Support**")
-        tech_churn = df.groupby("TechSupport")["is_churn"].mean() * 100
-        st.bar_chart(tech_churn, y_label="Churn Rate (%)", color="#1F77B4")
-
-with col_b:
-    if "OnlineSecurity" in df.columns:
-        st.markdown("**Online Security**")
-        sec_churn = df.groupby("OnlineSecurity")["is_churn"].mean() * 100
-        st.bar_chart(sec_churn, y_label="Churn Rate (%)", color="#1F77B4")
-
-# 9. Paperless Billing
-st.subheader("5. Paperless Billing Impact")
+# 8. Paperless Billing
+st.subheader("4. Paperless Billing Impact")
 st.caption("Paperless billing is efficient, but often correlates with higher churn.")
 
 if "PaperlessBilling" in df.columns:
