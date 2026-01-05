@@ -13,7 +13,14 @@ def load_model():
 
 @st.cache_data
 def load_data():
-    return pd.read_csv("Dataset/TelcoCustomerChurn.csv")
+    # Single source of truth for the dataset path
+    df = pd.read_csv("Dataset/TelcoCustomerChurn.csv")
+
+    # Clean TotalCharges (common Telco issue: blanks like " ")
+    if "TotalCharges" in df.columns:
+        df["TotalCharges"] = pd.to_numeric(df["TotalCharges"], errors="coerce")
+
+    return df
 
 model = load_model()
 df = load_data()
@@ -21,7 +28,8 @@ df = load_data()
 st.title("Telco Customer Churn Prediction")
 st.write(
     "Use this app to predict churn for a single customer, "
-    "or rank all customers by churn risk."
+    "or rank all customers by churn risk.\n\n"
+    "➡️ Use the sidebar to open the **Dashboard** page."
 )
 
 tab_single, tab_all = st.tabs(["Single Prediction", "All Customers Ranking"])
